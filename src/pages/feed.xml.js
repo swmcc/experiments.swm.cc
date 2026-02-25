@@ -5,21 +5,45 @@ export async function GET(context) {
   const posts = await getCollection('posts');
   const experiments = await getCollection('experiments');
 
-  const items = posts
+  // Build a map of experiment slugs to titles
+  const experimentMap = new Map();
+  experiments.forEach((e) => {
+    const slug = e.id.replace('/index', '');
+    experimentMap.set(slug, e.data.title);
+  });
+
+  // Posts as feed items
+  const postItems = posts
     .filter((post) => !post.data.draft)
-    .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
     .map((post) => {
       const parts = post.id.split('/');
       const experimentSlug = parts[0];
       const postSlug = parts.slice(1).join('/').replace('.mdx', '').replace('.md', '');
-      const experiment = experiments.find((e) => e.id.startsWith(experimentSlug + '/'));
+      const experimentTitle = experimentMap.get(experimentSlug) || experimentSlug;
 
       return {
-        title: `${post.data.title} (${experiment?.data.title || experimentSlug})`,
+        title: `${post.data.title} (${experimentTitle})`,
+        description: `New update in ${experimentTitle}`,
         pubDate: post.data.pubDate,
         link: `/${experimentSlug}/${postSlug}/`,
       };
     });
+
+  // Experiments as feed items (when they start)
+  const experimentItems = experiments.map((experiment) => {
+    const slug = experiment.id.replace('/index', '');
+    return {
+      title: `New experiment: ${experiment.data.title}`,
+      description: experiment.data.description,
+      pubDate: experiment.data.started,
+      link: `/${slug}/`,
+    };
+  });
+
+  // Combine and sort by date
+  const items = [...postItems, ...experimentItems].sort(
+    (a, b) => b.pubDate.getTime() - a.pubDate.getTime()
+  );
 
   return rss({
     title: 'experiments.swm.cc',
