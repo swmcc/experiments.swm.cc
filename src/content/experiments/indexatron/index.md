@@ -3,7 +3,7 @@ title: "Indexatron"
 tagline: "What's in my photos?"
 description: "Teaching local LLMs to analyse family photos while preserving privacy. No cloud uploads, just Ollama and curiosity."
 status: "active"
-started: 2026-02-01
+started: 2026-02-22
 repo: "https://github.com/swmcc/indexatron"
 writeup: "https://swm.cc/writing/indexatron-local-llm-photo-analysis/"
 note: "https://swm.cc/notes/the-llm-is-the-new-parser/"
