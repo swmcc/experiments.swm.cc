@@ -3,40 +3,106 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="About" description="What this site is about">
-  <div class="container py-12">
-    <header class="mb-8">
-      <h1 class="text-3xl font-bold mb-4">about</h1>
-    </header>
+  <div class="max-w-6xl mx-auto px-6 py-12">
+    <div class="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
+      <!-- Content -->
+      <div class="flex-1">
+        <header class="mb-8">
+          <h1 class="text-3xl font-bold mb-4">about</h1>
+        </header>
 
-    <div class="prose max-w-2xl">
-      <p>
-        This is where I document my experiments, side projects, and explorations.
-        Think of it as a digital lab notebook - a place to track progress,
-        share learnings, and keep myself accountable.
-      </p>
+        <div class="prose max-w-2xl">
+          <p>
+            A notebook, but organised. A place to dump ideas, track progress,
+            and document the things I'm tinkering with.
+          </p>
 
-      <p>
-        Each experiment has its own page with a timeline of posts documenting
-        the journey from idea to (hopefully) something interesting.
-      </p>
+          <p>
+            Each experiment gets its own page with a timeline showing how it evolves.
+            Some will go somewhere. Most won't. That's the point.
+          </p>
 
-      <h2>Why public?</h2>
-      <p>
-        Writing in public forces clarity. It's easy to convince yourself
-        you understand something until you try to explain it. Plus, maybe
-        someone else finds it useful.
-      </p>
+          <h2>What you'll find here</h2>
+          <p>
+            A hodge podge. Links might go to:
+          </p>
+          <ul>
+            <li>Self-contained posts right here</li>
+            <li>Blog posts on <a href="https://swm.cc" target="_blank" rel="noopener">swm.cc</a></li>
+            <li>GitHub PRs and code</li>
+            <li>Actual sites or apps (if they get that far)</li>
+          </ul>
 
-      <h2>The format</h2>
-      <p>
-        Each experiment starts with a question or goal. Posts document
-        progress - what worked, what didn't, what I learned. Links to
-        code, PRs, and resources where relevant.
-      </p>
+          <h2>Why public?</h2>
+          <p>
+            Writing in public forces clarity. It's easy to convince yourself
+            you understand something until you try to explain it. Plus, maybe
+            someone else finds it useful.
+          </p>
 
-      <p>
-        If you want to follow along, there's an <a href="/feed.xml">RSS feed</a>.
-      </p>
+          <p class="mt-8">
+            If you want to follow along, there's an <a href="/feed.xml">RSS feed</a>.
+          </p>
+        </div>
+      </div>
+
+      <!-- Avatar -->
+      <div class="lg:sticky lg:top-24 flex-shrink-0">
+        <div class="avatar-container">
+          <img
+            src="https://swm.cc/profile.svg"
+            alt="Profile"
+            class="avatar-img"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </BaseLayout>
+
+<style>
+  .avatar-container {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .avatar-img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 3px solid var(--color-border);
+    opacity: 0.8;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    25% {
+      transform: translateY(-10px) rotate(2deg);
+    }
+    50% {
+      transform: translateY(0) rotate(0deg);
+    }
+    75% {
+      transform: translateY(-5px) rotate(-2deg);
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .avatar-container {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto;
+    }
+
+    .avatar-img {
+      width: 130px;
+      height: 130px;
+    }
+  }
+</style>
