@@ -54,6 +54,27 @@ const formatShortDate = (date: Date) => {
     month: 'short',
   });
 };
+
+// Check which dates have multiple posts
+const dateCounts = new Map<string, number>();
+posts.forEach((post) => {
+  const dateKey = post.pubDate.toISOString().split('T')[0];
+  dateCounts.set(dateKey, (dateCounts.get(dateKey) || 0) + 1);
+});
+
+const formatTimelineDate = (date: Date) => {
+  const dateKey = date.toISOString().split('T')[0];
+  const hasMultiple = (dateCounts.get(dateKey) || 0) > 1;
+
+  if (hasMultiple) {
+    const time = date.toLocaleTimeString('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+    return `${formatShortDate(date)} ${time}`;
+  }
+  return formatShortDate(date);
+};
 ---
 
 <BaseLayout title={experiment.data.title} description={experiment.data.description}>
@@ -132,7 +153,7 @@ const formatShortDate = (date: Date) => {
                   <div class="timeline-dot"></div>
                   <div class="timeline-content">
                     <time class="text-xs text-[--color-text-dim] font-mono">
-                      {formatShortDate(post.pubDate)}
+                      {formatTimelineDate(post.pubDate)}
                     </time>
                     <a
                       href={`/${slug}/${post.slug}/`}
