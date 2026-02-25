@@ -2,6 +2,7 @@
 title: "Teaching Local LLMs to See Family Photos"
 pubDate: 2026-02-22
 pr: "https://github.com/swmcc/indexatron/pull/2"
+snapshot: "https://github.com/swmcc/indexatron/tree/03-image-analysis"
 tags: ["python", "ollama", "llava"]
 ---
 
