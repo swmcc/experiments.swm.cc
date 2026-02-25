@@ -1,6 +1,7 @@
 ---
 title: "Teaching Local LLMs to See Family Photos"
 pubDate: 2026-02-22
+pr: "https://github.com/swmcc/indexatron/pull/2"
 tags: ["python", "ollama", "llava"]
 ---
 
