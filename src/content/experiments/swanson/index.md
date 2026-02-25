@@ -3,7 +3,7 @@ title: "Swanson"
 tagline: "What should we watch tonight?"
 description: "A RAG-enhanced recommendation system that analyses viewing history to suggest TV shows and movies. Built into whatisonthe.tv."
 status: "stalled"
-started: 2025-12-01
+started: 2026-02-07
 repo: "https://github.com/swmcc/swanson"
 tags: ["rag", "llm", "fastapi", "svelte"]
 ---
