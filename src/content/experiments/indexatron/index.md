@@ -2,7 +2,7 @@
 title: "Indexatron"
 tagline: "What's in my photos?"
 description: "Using local LLMs to analyse and index a personal photo library. No cloud, no API costs, just a GPU and curiosity."
-status: "paused"
+status: "active"
 started: 2025-11-15
 tags: ["llm", "photos", "local-ai"]
 ---

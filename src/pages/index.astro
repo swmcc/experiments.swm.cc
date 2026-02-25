@@ -23,7 +23,6 @@ const statusLabels = {
   archived: 'ARCHIVED',
 };
 
-// Image mapping for experiments
 const experimentImages: Record<string, string> = {
   'the-wire-graph': '/the-wire-graph.png',
   'indexatron': '/indexatron.png',
@@ -38,19 +37,7 @@ const experimentImages: Record<string, string> = {
       <div class="grid-bg"></div>
     </div>
 
-    <div class="relative z-10 max-w-4xl mx-auto px-6 py-20 text-center">
-      <div class="flex items-center justify-center gap-4 mb-8">
-        <img
-          src="https://swm.cc/profile.svg"
-          alt="Profile"
-          class="w-16 h-16 rounded-full border-2 border-[--color-accent] opacity-80"
-        />
-        <div class="text-left">
-          <div class="font-mono text-xs text-[--color-accent] tracking-widest uppercase">Research Division</div>
-          <div class="font-mono text-[--color-text-dim]">swm.cc/experiments</div>
-        </div>
-      </div>
-
+    <div class="relative z-10 max-w-4xl mx-auto px-6 py-20">
       <!-- Terminal window -->
       <div class="terminal-window text-left max-w-2xl mx-auto">
         <div class="terminal-header">
@@ -59,27 +46,38 @@ const experimentImages: Record<string, string> = {
             <span class="dot yellow"></span>
             <span class="dot green"></span>
           </div>
-          <span class="terminal-title">~/experiments</span>
+          <span class="terminal-title">~/sandbox</span>
         </div>
         <div class="terminal-body font-mono text-sm">
-          <div class="line"><span class="prompt">$</span> cat README.md</div>
-          <div class="output mt-2">
-            <p class="text-[--color-text]"># experiments.swm.cc</p>
-            <p class="text-[--color-text-muted] mt-2">A digital lab notebook.</p>
-            <p class="text-[--color-text-muted]">Nothing here is finished. Everything is in progress.</p>
-            <p class="text-[--color-text-muted] mt-2">Side projects, explorations, and things I'm</p>
-            <p class="text-[--color-text-muted]">figuring out as I go.</p>
-          </div>
-          <div class="line mt-4"><span class="prompt">$</span> ls -la experiments/</div>
-          <div class="output mt-2 text-[--color-accent]">
-            {sortedExperiments.map((exp) => {
-              const slug = exp.id.replace('/index', '');
-              return <p>drwxr-xr-x  {slug}/</p>;
-            })}
-          </div>
-          <div class="line mt-4 flex items-center">
-            <span class="prompt">$</span>
-            <span class="cursor"></span>
+          <div class="terminal-content">
+            <div class="terminal-text">
+              <div class="line"><span class="prompt">$</span> ./init_sandbox.sh</div>
+              <div class="output mt-3">
+                <p class="text-[--color-accent]">[OK] Initialising sandbox environment...</p>
+                <p class="text-[--color-text-muted] mt-2">&gt; A perpetual work-in-progress.</p>
+                <p class="text-[--color-text-muted]">&gt; Ideas mutate. Code evolves. Nothing is final.</p>
+                <p class="text-[--color-text-muted]">&gt; Just a place to tinker, break things,</p>
+                <p class="text-[--color-text-muted]">&gt; and occasionally build something useful.</p>
+              </div>
+              <div class="line mt-4"><span class="prompt">$</span> cat /proc/experiments</div>
+              <div class="output mt-2">
+                {sortedExperiments.map((exp) => {
+                  const slug = exp.id.replace('/index', '');
+                  return <p class="text-[--color-accent]">[RUNNING] {slug} <span class="text-[--color-text-dim]">pid:{Math.floor(Math.random() * 9000) + 1000}</span></p>;
+                })}
+              </div>
+              <div class="line mt-4 flex items-center">
+                <span class="prompt">$</span>
+                <span class="cursor"></span>
+              </div>
+            </div>
+            <div class="terminal-avatar">
+              <img
+                src="https://swm.cc/profile.svg"
+                alt="Profile"
+                class="avatar-img"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -90,7 +88,7 @@ const experimentImages: Record<string, string> = {
   <section class="py-16 px-6">
     <div class="max-w-7xl mx-auto">
       <h2 class="font-mono text-xs text-[--color-text-dim] tracking-widest uppercase mb-8">
-        Active Experiments ({sortedExperiments.length})
+        Experiments ({sortedExperiments.length})
       </h2>
 
       <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -207,8 +205,42 @@ const experimentImages: Record<string, string> = {
   }
 
   .terminal-body {
-    padding: 1rem;
-    min-height: 200px;
+    padding: 1.5rem;
+    min-height: 240px;
+  }
+
+  .terminal-content {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
+  .terminal-text {
+    flex: 1;
+  }
+
+  .terminal-avatar {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .avatar-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 2px solid var(--color-border);
+    opacity: 0.7;
+    animation: spin-pause 8s ease-in-out infinite;
+  }
+
+  @keyframes spin-pause {
+    0%, 80% { transform: rotate(0deg); }
+    90% { transform: rotate(360deg); }
+    100% { transform: rotate(360deg); }
   }
 
   .line {
@@ -273,5 +305,21 @@ const experimentImages: Record<string, string> = {
 
   .card-content {
     padding: 1.5rem;
+  }
+
+  @media (max-width: 640px) {
+    .terminal-content {
+      flex-direction: column-reverse;
+      align-items: center;
+      text-align: center;
+    }
+
+    .terminal-avatar {
+      margin-bottom: 1rem;
+    }
+
+    .line {
+      justify-content: center;
+    }
   }
 </style>
