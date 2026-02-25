@@ -1,6 +1,6 @@
 ---
 title: "Batch Processing"
-pubDate: 2026-02-22T10:55:07Z
+pubDate: 2026-02-22T11:28:00Z
 pr: "https://github.com/swmcc/indexatron/pull/4"
 snapshot: "https://github.com/swmcc/indexatron/tree/05-batch-processing"
 tags: ["python", "batch"]

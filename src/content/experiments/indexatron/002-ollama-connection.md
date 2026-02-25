@@ -1,6 +1,6 @@
 ---
 title: "Ollama Connection"
-pubDate: 2026-02-22T10:54:53Z
+pubDate: 2026-02-22T08:22:00Z
 pr: "https://github.com/swmcc/indexatron/pull/1"
 snapshot: "https://github.com/swmcc/indexatron/tree/02-ollama-connection"
 tags: ["python", "ollama"]

@@ -1,6 +1,6 @@
 ---
 title: "Image Analysis with LLaVA"
-pubDate: 2026-02-22T10:54:58Z
+pubDate: 2026-02-22T09:47:00Z
 pr: "https://github.com/swmcc/indexatron/pull/2"
 snapshot: "https://github.com/swmcc/indexatron/tree/03-image-analysis"
 tags: ["python", "ollama", "llava"]
