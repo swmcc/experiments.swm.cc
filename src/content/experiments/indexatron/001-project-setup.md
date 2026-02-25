@@ -1,6 +1,6 @@
 ---
 title: "Project Setup"
-pubDate: 2026-02-01
+pubDate: 2026-02-22T10:56:59Z
 pr: "https://github.com/swmcc/indexatron/pull/5"
 snapshot: "https://github.com/swmcc/indexatron/tree/01-project-setup"
 tags: ["python", "setup"]

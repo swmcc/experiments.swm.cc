@@ -1,6 +1,6 @@
 ---
 title: "Embedding Generation"
-pubDate: 2026-02-18
+pubDate: 2026-02-22T10:55:35Z
 pr: "https://github.com/swmcc/indexatron/pull/3"
 snapshot: "https://github.com/swmcc/indexatron/tree/04-embedding-generation"
 tags: ["python", "embeddings", "nomic"]
