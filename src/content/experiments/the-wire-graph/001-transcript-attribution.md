@@ -2,6 +2,7 @@
 title: "Phase 1: Transcript Attribution Pipeline"
 pubDate: 2026-02-25
 pr: "https://github.com/swmcc/the-board/pull/1"
+snapshot: "https://github.com/swmcc/the-board/tree/snapshot/phase-1-attribution-pipeline"
 tags: ["python", "ai"]
 ---
 
