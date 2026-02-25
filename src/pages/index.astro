@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ExperimentCard from '../components/ExperimentCard.astro';
+
+const experiments = await getCollection('experiments');
+const posts = await getCollection('posts');
+
+// Get post counts per experiment
+const getPostCount = (experimentSlug: string) => {
+  return posts.filter((post) => post.id.startsWith(experimentSlug + '/')).length;
+};
+
+// Sort: active first, then by start date
+const sortedExperiments = experiments.sort((a, b) => {
+  const statusOrder = { active: 0, paused: 1, completed: 2, archived: 3 };
+  const statusDiff = statusOrder[a.data.status] - statusOrder[b.data.status];
+  if (statusDiff !== 0) return statusDiff;
+  return b.data.started.getTime() - a.data.started.getTime();
+});
+---
+
+<BaseLayout title="Home">
+  <div class="container py-12">
+    <header class="mb-12">
+      <h1 class="text-4xl font-bold mb-4">experiments</h1>
+      <p class="text-[--color-text-muted] text-lg max-w-2xl">
+        A digital lab notebook documenting side projects, explorations, and things I'm figuring out as I go.
+      </p>
+    </header>
+
+    <section>
+      <div class="grid gap-6 sm:grid-cols-2">
+        {sortedExperiments.map((experiment) => {
+          const slug = experiment.id.replace('/index', '');
+          return (
+            <ExperimentCard
+              slug={slug}
+              title={experiment.data.title}
+              tagline={experiment.data.tagline}
+              description={experiment.data.description}
+              status={experiment.data.status}
+              started={experiment.data.started}
+              tags={experiment.data.tags}
+              postCount={getPostCount(slug)}
+            />
+          );
+        })}
+      </div>
+
+      {sortedExperiments.length === 0 && (
+        <p class="text-[--color-text-muted] text-center py-12">
+          No experiments yet. Check back soon.
+        </p>
+      )}
+    </section>
+  </div>
+</BaseLayout>

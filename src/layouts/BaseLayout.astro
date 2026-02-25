@@ -1,0 +1,48 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'A digital lab notebook' } = Astro.props;
+const fullTitle = title === 'Home' ? 'experiments.swm.cc' : `${title} | experiments.swm.cc`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <title>{fullTitle}</title>
+  </head>
+  <body>
+    <header class="border-b border-[--color-border] bg-[--color-bg]/80 backdrop-blur-sm sticky top-0 z-50">
+      <div class="container py-4 flex items-center justify-between">
+        <a href="/" class="font-mono text-lg font-semibold hover:text-[--color-accent]">
+          experiments<span class="text-[--color-text-dim]">.swm.cc</span>
+        </a>
+        <nav class="flex gap-6 font-mono text-sm">
+          <a href="/" class="text-[--color-text-muted] hover:text-[--color-text]">home</a>
+          <a href="/about" class="text-[--color-text-muted] hover:text-[--color-text]">about</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="border-t border-[--color-border] mt-16">
+      <div class="container py-8 text-center text-[--color-text-dim] text-sm font-mono">
+        <p>a digital lab notebook</p>
+      </div>
+    </footer>
+  </body>
+</html>

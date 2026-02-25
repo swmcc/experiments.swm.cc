@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About" description="What this site is about">
+  <div class="container py-12">
+    <header class="mb-8">
+      <h1 class="text-3xl font-bold mb-4">about</h1>
+    </header>
+
+    <div class="prose max-w-2xl">
+      <p>
+        This is where I document my experiments, side projects, and explorations.
+        Think of it as a digital lab notebook - a place to track progress,
+        share learnings, and keep myself accountable.
+      </p>
+
+      <p>
+        Each experiment has its own page with a timeline of posts documenting
+        the journey from idea to (hopefully) something interesting.
+      </p>
+
+      <h2>Why public?</h2>
+      <p>
+        Writing in public forces clarity. It's easy to convince yourself
+        you understand something until you try to explain it. Plus, maybe
+        someone else finds it useful.
+      </p>
+
+      <h2>The format</h2>
+      <p>
+        Each experiment starts with a question or goal. Posts document
+        progress - what worked, what didn't, what I learned. Links to
+        code, PRs, and resources where relevant.
+      </p>
+
+      <p>
+        If you want to follow along, there's an <a href="/feed.xml">RSS feed</a>.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

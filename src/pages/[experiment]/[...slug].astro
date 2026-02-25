@@ -1,0 +1,45 @@
+---
+import { getCollection, render } from 'astro:content';
+import PostLayout from '../../layouts/PostLayout.astro';
+
+export async function getStaticPaths() {
+  const experiments = await getCollection('experiments');
+  const posts = await getCollection('posts');
+
+  return posts
+    .filter((post) => !post.data.draft)
+    .map((post) => {
+      const parts = post.id.split('/');
+      const experimentSlug = parts[0];
+      const postSlug = parts.slice(1).join('/').replace('.mdx', '').replace('.md', '');
+      const experiment = experiments.find((e) => e.id.startsWith(experimentSlug + '/'));
+
+      return {
+        params: {
+          experiment: experimentSlug,
+          slug: postSlug,
+        },
+        props: {
+          post,
+          experimentTitle: experiment?.data.title || experimentSlug,
+          experimentSlug,
+        },
+      };
+    });
+}
+
+const { post, experimentTitle, experimentSlug } = Astro.props;
+const { Content } = await render(post);
+---
+
+<PostLayout
+  title={post.data.title}
+  pubDate={post.data.pubDate}
+  updatedDate={post.data.updatedDate}
+  experimentTitle={experimentTitle}
+  experimentSlug={experimentSlug}
+  pr={post.data.pr}
+  tags={post.data.tags}
+>
+  <Content />
+</PostLayout>
