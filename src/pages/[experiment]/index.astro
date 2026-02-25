@@ -1,7 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Timeline from '../../components/Timeline.astro';
 
 export async function getStaticPaths() {
   const experiments = await getCollection('experiments');
@@ -46,10 +45,17 @@ const formatDate = (date: Date) => {
     year: 'numeric',
   });
 };
+
+const formatShortDate = (date: Date) => {
+  return date.toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+  });
+};
 ---
 
 <BaseLayout title={experiment.data.title} description={experiment.data.description}>
-  <div class="container py-12">
+  <div class="max-w-7xl mx-auto px-6 py-12">
     <a
       href="/"
       class="inline-flex items-center gap-2 text-sm text-[--color-text-muted] hover:text-[--color-accent] mb-6"
@@ -60,58 +66,158 @@ const formatDate = (date: Date) => {
       All experiments
     </a>
 
-    <header class="mb-8">
-      <div class="flex items-start justify-between gap-4 mb-4">
-        <h1 class="text-3xl font-bold">{experiment.data.title}</h1>
-        <span class={`status-badge ${experiment.data.status} shrink-0`}>
-          {statusLabels[experiment.data.status]}
-        </span>
+    <div class="flex flex-col lg:flex-row gap-12 lg:gap-16">
+      <!-- Main Content -->
+      <div class="flex-1 min-w-0">
+        <header class="mb-8">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <h1 class="text-3xl font-bold">{experiment.data.title}</h1>
+            <span class={`status-badge ${experiment.data.status} shrink-0`}>
+              {statusLabels[experiment.data.status]}
+            </span>
+          </div>
+
+          {experiment.data.tagline && (
+            <p class="text-xl text-[--color-text-muted] italic mb-4">
+              "{experiment.data.tagline}"
+            </p>
+          )}
+
+          <div class="flex flex-wrap items-center gap-4 text-sm text-[--color-text-muted]">
+            <span class="font-mono">Started {formatDate(experiment.data.started)}</span>
+            {experiment.data.repo && (
+              <a
+                href={experiment.data.repo}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1 hover:text-[--color-accent]"
+              >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                GitHub
+              </a>
+            )}
+          </div>
+
+          {experiment.data.tags && experiment.data.tags.length > 0 && (
+            <div class="flex gap-2 mt-4">
+              {experiment.data.tags.map((tag) => (
+                <span class="tag">{tag}</span>
+              ))}
+            </div>
+          )}
+        </header>
+
+        <section>
+          <div class="prose">
+            <Content />
+          </div>
+        </section>
       </div>
 
-      {experiment.data.tagline && (
-        <p class="text-xl text-[--color-text-muted] italic mb-4">
-          "{experiment.data.tagline}"
-        </p>
+      <!-- Timeline Sidebar -->
+      {posts.length > 0 && (
+        <aside class="lg:w-80 lg:sticky lg:top-24 lg:self-start">
+          <div class="timeline-card">
+            <h2 class="font-mono text-xs text-[--color-accent] tracking-widest uppercase mb-6">
+              Timeline
+            </h2>
+            <div class="timeline">
+              {posts.map((post, index) => (
+                <div class="timeline-item">
+                  <div class="timeline-dot"></div>
+                  <div class="timeline-content">
+                    <time class="text-xs text-[--color-text-dim] font-mono">
+                      {formatShortDate(post.pubDate)}
+                    </time>
+                    <a
+                      href={`/${slug}/${post.slug}/`}
+                      class="block text-[--color-text] hover:text-[--color-accent] font-medium mt-1 leading-snug"
+                    >
+                      {post.title}
+                    </a>
+                    {post.pr && (
+                      <a
+                        href={post.pr}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center gap-1 text-xs text-[--color-text-dim] hover:text-[--color-accent] mt-1"
+                      >
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        PR
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </aside>
       )}
-
-      <div class="flex flex-wrap items-center gap-4 text-sm text-[--color-text-muted]">
-        <span class="font-mono">Started {formatDate(experiment.data.started)}</span>
-        {experiment.data.repo && (
-          <a
-            href={experiment.data.repo}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-1 hover:text-[--color-accent]"
-          >
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-            </svg>
-            GitHub
-          </a>
-        )}
-      </div>
-
-      {experiment.data.tags && experiment.data.tags.length > 0 && (
-        <div class="flex gap-2 mt-4">
-          {experiment.data.tags.map((tag) => (
-            <span class="tag">{tag}</span>
-          ))}
-        </div>
-      )}
-    </header>
-
-    <section class="mb-12">
-      <h2 class="text-lg font-semibold mb-4 text-[--color-text-dim]">About this experiment</h2>
-      <div class="prose">
-        <Content />
-      </div>
-    </section>
-
-    {posts.length > 0 && (
-      <section>
-        <h2 class="text-lg font-semibold mb-6 text-[--color-text-dim]">Timeline</h2>
-        <Timeline posts={posts} experimentSlug={slug} />
-      </section>
-    )}
+    </div>
   </div>
 </BaseLayout>
+
+<style>
+  .timeline-card {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+
+  .timeline {
+    position: relative;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--color-accent), var(--color-border));
+    border-radius: 1px;
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-left: 2rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-bg);
+    border: 2px solid var(--color-accent);
+    box-shadow: 0 0 0 4px var(--color-bg-card);
+  }
+
+  .timeline-item:first-child .timeline-dot {
+    background: var(--color-accent);
+    box-shadow: 0 0 0 4px var(--color-bg-card), 0 0 12px var(--color-accent);
+  }
+
+  .timeline-content {
+    padding-top: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .timeline-card {
+      margin-top: 2rem;
+    }
+  }
+</style>
