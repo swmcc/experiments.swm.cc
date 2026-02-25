@@ -20,6 +20,7 @@
 
   /* Status colors */
   --color-status-active: #34d399;
+  --color-status-stalled: #f97316;
   --color-status-paused: #fbbf24;
   --color-status-completed: #60a5fa;
   --color-status-archived: #6b7280;
@@ -184,6 +185,7 @@ pre code {
 }
 
 .status-badge.active::before { background: var(--color-status-active); }
+.status-badge.stalled::before { background: var(--color-status-stalled); }
 .status-badge.paused::before { background: var(--color-status-paused); }
 .status-badge.completed::before { background: var(--color-status-completed); }
 .status-badge.archived::before { background: var(--color-status-archived); }

@@ -40,8 +40,40 @@ const fullTitle = title === 'Home' ? 'experiments.swm.cc' : `${title} | experime
     </main>
 
     <footer class="border-t border-[--color-border] mt-16">
-      <div class="container py-8 text-center text-[--color-text-dim] text-sm font-mono">
-        <p>a digital lab notebook</p>
+      <div class="max-w-7xl mx-auto px-6 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+          <!-- Branding -->
+          <div>
+            <h3 class="font-mono font-semibold text-[--color-text] mb-3">experiments.swm.cc</h3>
+            <p class="text-sm text-[--color-text-muted]">
+              A digital lab notebook. Ideas, explorations, and things in progress.
+            </p>
+          </div>
+
+          <!-- Quick Links -->
+          <div>
+            <h3 class="font-mono text-xs text-[--color-text-dim] uppercase tracking-wider mb-3">Quick Links</h3>
+            <nav class="flex flex-col gap-2 text-sm">
+              <a href="/" class="text-[--color-text-muted] hover:text-[--color-accent]">Home</a>
+              <a href="/about" class="text-[--color-text-muted] hover:text-[--color-accent]">About</a>
+              <a href="/feed.xml" class="text-[--color-text-muted] hover:text-[--color-accent]">RSS Feed</a>
+            </nav>
+          </div>
+
+          <!-- Connect -->
+          <div>
+            <h3 class="font-mono text-xs text-[--color-text-dim] uppercase tracking-wider mb-3">Connect</h3>
+            <nav class="flex flex-col gap-2 text-sm">
+              <a href="https://swm.cc" target="_blank" rel="noopener" class="text-[--color-text-muted] hover:text-[--color-accent]">swm.cc</a>
+              <a href="https://github.com/swmcc" target="_blank" rel="noopener" class="text-[--color-text-muted] hover:text-[--color-accent]">GitHub</a>
+            </nav>
+          </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="pt-8 border-t border-[--color-border] text-center text-sm text-[--color-text-dim]">
+          <p>&copy; 2026 Stephen McCullough. Built with <a href="https://astro.build" target="_blank" rel="noopener" class="text-[--color-text-muted] hover:text-[--color-accent]">Astro</a>.</p>
+        </div>
       </div>
     </footer>
   </body>

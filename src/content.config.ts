@@ -7,7 +7,7 @@ const experiments = defineCollection({
     title: z.string(),
     tagline: z.string().optional(),
     description: z.string(),
-    status: z.enum(['active', 'paused', 'completed', 'archived']),
+    status: z.enum(['active', 'paused', 'stalled', 'completed', 'archived']),
     started: z.coerce.date(),
     repo: z.string().url().optional(),
     tags: z.array(z.string()).default([]),
