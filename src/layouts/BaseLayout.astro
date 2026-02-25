@@ -25,7 +25,14 @@ const fullTitle = title === 'Home' ? 'experiments.swm.cc' : `${title} | experime
   <body>
     <header class="border-b border-[--color-border] bg-[--color-bg]/80 backdrop-blur-sm sticky top-0 z-50">
       <div class="container py-4 flex items-center justify-between">
-        <a href="/" class="font-mono text-lg font-semibold hover:text-[--color-accent]">
+        <a href="/" class="flex items-center gap-2 font-mono text-lg font-semibold hover:text-[--color-accent]">
+          <svg class="w-5 h-5 text-[--color-accent]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 3h6v4.5l3 9A3 3 0 0 1 15.17 21H8.83A3 3 0 0 1 6 16.5l3-9V3z" />
+            <path d="M9 3h6" />
+            <circle cx="12" cy="15" r="1" fill="currentColor" />
+            <circle cx="10" cy="17" r="0.5" fill="currentColor" />
+            <circle cx="14" cy="16" r="0.5" fill="currentColor" />
+          </svg>
           experiments<span class="text-[--color-text-dim]">.swm.cc</span>
         </a>
         <nav class="flex gap-6 font-mono text-sm">
