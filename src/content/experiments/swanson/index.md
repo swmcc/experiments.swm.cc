@@ -5,6 +5,7 @@ description: "A RAG-enhanced recommendation system that analyses viewing history
 status: "stalled"
 started: 2026-02-07
 repo: "https://github.com/swmcc/swanson"
+writeup: "https://swm.cc/writing/building-swanson-recommendation-system/"
 tags: ["rag", "llm", "fastapi", "svelte"]
 ---
 

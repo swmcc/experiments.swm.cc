@@ -5,6 +5,7 @@ description: "Teaching local LLMs to analyse family photos while preserving priv
 status: "active"
 started: 2026-02-01
 repo: "https://github.com/swmcc/indexatron"
+writeup: "https://swm.cc/writing/indexatron-local-llm-photo-analysis/"
 tags: ["llm", "python", "ollama", "privacy"]
 ---
 
