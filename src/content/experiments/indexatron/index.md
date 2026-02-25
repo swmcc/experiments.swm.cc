@@ -1,23 +1,34 @@
 ---
 title: "Indexatron"
 tagline: "What's in my photos?"
-description: "Using local LLMs to analyse and index a personal photo library. No cloud, no API costs, just a GPU and curiosity."
+description: "Teaching local LLMs to analyse family photos while preserving privacy. No cloud uploads, just Ollama and curiosity."
 status: "active"
-started: 2025-11-15
-tags: ["llm", "photos", "local-ai"]
+started: 2026-02-01
+repo: "https://github.com/swmcc/indexatron"
+tags: ["llm", "python", "ollama", "privacy"]
 ---
 
-I have thousands of photos spanning years. Finding specific ones is a nightmare. "That photo of the beach with the dog" - good luck searching for that.
+I have thousands of family photos. Finding specific ones is a nightmare. "That photo from the wedding with Uncle Dave" - good luck.
 
-This experiment explores using local LLMs (running on my own hardware) to analyse photos and generate searchable descriptions. The goal is a personal photo index that understands content, not just metadata.
+Cloud services can do this, but uploading family photos to third parties feels wrong. This experiment proves that locally-run LLMs can analyse photos with useful metadata extraction - no cloud required.
 
-## The challenge
+## The hypothesis
 
-- Run everything locally (privacy, no API costs)
-- Handle thousands of images efficiently
-- Generate useful, searchable descriptions
-- Build a simple search interface
+Local LLMs can analyse family photos with useful metadata extraction.
 
-## Current status
+**Status: Confirmed.**
 
-Paused while I focus on other experiments. Initial tests with LLaVA showed promising results for image description, but the pipeline needs work.
+## The stack
+
+- **Runtime**: Ollama
+- **Vision Model**: LLaVA:7b (~4.7GB)
+- **Embeddings**: nomic-embed-text (~274MB)
+- **Language**: Python 3.11+ with pydantic, Pillow, Rich
+
+## What it does
+
+Feed it a photo, get back:
+- Subject identification (people, objects, brands)
+- Scene categorisation
+- Era estimation from visual cues
+- 768-dimensional semantic embeddings for similarity search

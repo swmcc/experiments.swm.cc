@@ -1,33 +1,32 @@
 ---
-title: "Initial Setup: Local LLM Photo Analysis"
-pubDate: 2025-11-20
-tags: ["llm", "setup"]
+title: "Teaching Local LLMs to See Family Photos"
+pubDate: 2026-02-22
+tags: ["python", "ollama", "llava"]
 ---
 
-First steps into local LLM-powered photo analysis. The goal: describe what's in a photo using AI running entirely on my own hardware.
+The first proper test run. Three family photos through LLaVA:7b running locally on Ollama.
 
-## The stack
+## Results
 
-- **Model**: LLaVA (Large Language and Vision Assistant)
-- **Hardware**: M1 Mac with 16GB RAM
-- **Framework**: Ollama for easy model management
+| Metric | Result |
+|--------|--------|
+| Images Processed | 3/3 |
+| Failed | 0 |
+| Total Time | 40.82 seconds |
+| Average per Image | ~13.6 seconds |
 
-## First results
+## What it got right
 
-Surprisingly good. Fed it a random photo from my library:
+- Identified a tan Labrador on a wooden floor, mood: calm
+- Recognised a Kingfisher beer bottle in a restaurant setting
+- Detected a wedding reception, estimated era: 2010s
 
-> "A golden retriever sitting on a sandy beach at sunset. The dog appears happy and relaxed, with waves visible in the background. The lighting suggests late afternoon."
+## What needs work
 
-That's searchable. That's useful.
+- LLaVA produces inconsistent JSON requiring repair logic
+- Some hallucinations (mentioning non-existent items)
+- Real-time analysis impractical without GPU acceleration
 
-## Challenges discovered
+## Full write-up
 
-1. **Speed**: About 5-10 seconds per image. For thousands of photos, this adds up.
-2. **Memory**: Larger models give better descriptions but need more RAM.
-3. **Consistency**: Same image can get slightly different descriptions on repeat runs.
-
-## Next steps
-
-- Batch processing pipeline
-- SQLite for storing descriptions
-- Simple search interface
+[Read the full post on swm.cc](https://swm.cc/writing/indexatron-local-llm-photo-analysis/) for the complete methodology, code samples, and conclusions.
