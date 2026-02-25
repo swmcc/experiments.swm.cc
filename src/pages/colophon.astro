@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Colophon" description="How this site is built">
+  <div class="max-w-4xl mx-auto px-6 py-12">
+    <header class="mb-8">
+      <h1 class="text-3xl font-bold mb-4">colophon</h1>
+    </header>
+
+    <div class="prose max-w-2xl">
+      <p>
+        A few notes on how this site is built and maintained.
+      </p>
+
+      <h2>Stack</h2>
+      <ul>
+        <li><a href="https://astro.build" target="_blank" rel="noopener">Astro</a> for static site generation</li>
+        <li><a href="https://tailwindcss.com" target="_blank" rel="noopener">Tailwind CSS</a> for styling</li>
+        <li><a href="https://mdxjs.com" target="_blank" rel="noopener">MDX</a> for content</li>
+        <li><a href="https://vercel.com" target="_blank" rel="noopener">Vercel</a> for hosting</li>
+      </ul>
+
+      <h2>Typography</h2>
+      <ul>
+        <li><a href="https://fonts.google.com/specimen/JetBrains+Mono" target="_blank" rel="noopener">JetBrains Mono</a> for headings and code</li>
+        <li><a href="https://fonts.google.com/specimen/Inter" target="_blank" rel="noopener">Inter</a> for body text</li>
+      </ul>
+
+      <h2>Design</h2>
+      <p>
+        Dark mode by default. Muted greens and teals for a scientific, terminal-like aesthetic.
+        The goal was something that feels like a lab notebook without being too precious about it.
+      </p>
+
+      <h2>Source</h2>
+      <p>
+        The source code is available on <a href="https://github.com/swmcc/experiments.swm.cc" target="_blank" rel="noopener">GitHub</a>.
+      </p>
+    </div>
+  </div>
+</BaseLayout>
