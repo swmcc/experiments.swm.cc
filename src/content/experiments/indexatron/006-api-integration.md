@@ -1,6 +1,6 @@
 ---
 title: "API Integration"
-pubDate: 2026-04-06T00:00:00Z
+pubDate: 2026-04-06T02:45:00Z
 pr: "https://github.com/swmcc/indexatron/pull/6"
 snapshot: "https://github.com/swmcc/indexatron/tree/feature/api-service"
 tags: ["python", "api", "production"]
