@@ -19,23 +19,35 @@ Cloud services can do this, but uploading family photos to third parties feels w
 
 Local LLMs can analyse family photos with useful metadata extraction.
 
-**Status: Confirmed and in production.**
+**Status: Confirmed.** Now integrated with [the-mcculloughs.org](https://github.com/swmcc/the-mcculloughs.org) for automated photo analysis.
 
-Now integrated with [the-mcculloughs.org](https://github.com/swmcc/the-mcculloughs.org) for automated photo analysis.
+## Current state
+
+The service fetches pending uploads from the Rails app, analyses them with LLaVA, generates embeddings, and posts results back. Key learnings:
+
+- **Context matters**: Injecting photo metadata (title, caption, date, gallery) into prompts dramatically improves results
+- **LLaVA > Llama 3.2 Vision**: For structured JSON extraction, the smaller model is more reliable (no repetition loops)
+- **Override when you know better**: Use actual `date_taken` instead of AI guessing from visual cues
+- **Defensive parsing**: Vision models produce unexpected outputs; robust JSON repair is essential
 
 ## The stack
 
 - **Runtime**: Ollama
 - **Vision Model**: LLaVA:7b (~4.7GB)
 - **Embeddings**: nomic-embed-text (~274MB)
-- **Language**: Python 3.11+ with pydantic, Pillow, Rich
+- **Language**: Python 3.11+ with pydantic, httpx, Pillow, Rich
 
 ## What it does
 
 Feed it a photo, get back:
 - Subject identification (people, objects, brands)
 - Scene categorisation
-- Era estimation from visual cues (or override with actual date)
+- Era estimation (or override with actual date)
 - Family nickname resolution ("Mamie" -> "Isobel McCullough")
-- 768-dimensional semantic embeddings for similarity search
+- 768-dimensional semantic embeddings
 - Context-aware analysis using photo metadata
+
+## Next
+
+- [Search API](https://github.com/swmcc/the-mcculloughs.org/issues/99) - query by person, category, decade
+- Semantic search using embeddings - find similar photos
