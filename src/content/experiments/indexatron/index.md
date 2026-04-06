@@ -49,5 +49,6 @@ Feed it a photo, get back:
 
 ## Next
 
+- Make this a proper background service (systemd/launchd)
 - [Search API](https://github.com/swmcc/the-mcculloughs.org/issues/99) - query by person, category, decade
 - Semantic search using embeddings - find similar photos
