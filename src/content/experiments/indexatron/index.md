@@ -2,10 +2,11 @@
 title: "Indexatron"
 tagline: "What's in my photos?"
 description: "Teaching local LLMs to analyse family photos while preserving privacy. No cloud uploads, just Ollama and curiosity."
-status: "active"
+status: "completed"
 started: 2026-02-22
 repo: "https://github.com/swmcc/indexatron"
 writeup: "https://swm.cc/writing/indexatron-local-llm-photo-analysis/"
+writeup2: "https://swm.cc/writing/indexatron-context-aware-analysis/"
 note: "https://swm.cc/notes/the-llm-is-the-new-parser/"
 tags: ["llm", "python", "ollama", "privacy"]
 ---
@@ -18,7 +19,9 @@ Cloud services can do this, but uploading family photos to third parties feels w
 
 Local LLMs can analyse family photos with useful metadata extraction.
 
-**Status: Confirmed.**
+**Status: Confirmed and in production.**
+
+Now integrated with [the-mcculloughs.org](https://github.com/swmcc/the-mcculloughs.org) for automated photo analysis.
 
 ## The stack
 
@@ -32,5 +35,7 @@ Local LLMs can analyse family photos with useful metadata extraction.
 Feed it a photo, get back:
 - Subject identification (people, objects, brands)
 - Scene categorisation
-- Era estimation from visual cues
+- Era estimation from visual cues (or override with actual date)
+- Family nickname resolution ("Mamie" -> "Isobel McCullough")
 - 768-dimensional semantic embeddings for similarity search
+- Context-aware analysis using photo metadata

@@ -11,6 +11,7 @@ const experiments = defineCollection({
     started: z.coerce.date(),
     repo: z.string().url().optional(),
     writeup: z.string().url().optional(),
+    writeup2: z.string().url().optional(),
     note: z.string().url().optional(),
     tags: z.array(z.string()).default([]),
     cover: z.string().optional(),
