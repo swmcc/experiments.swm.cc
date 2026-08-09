@@ -13,6 +13,10 @@ const experiments = defineCollection({
     writeup: z.string().url().optional(),
     writeup2: z.string().url().optional(),
     note: z.string().url().optional(),
+    links: z.array(z.object({
+      label: z.string(),
+      url: z.string().url(),
+    })).default([]),
     tags: z.array(z.string()).default([]),
     cover: z.string().optional(),
   }),

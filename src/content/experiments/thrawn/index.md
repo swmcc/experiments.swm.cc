@@ -5,6 +5,11 @@ description: "An experiment in agentic development: a CLI that deep-plans a GitH
 status: "active"
 started: 2026-08-05
 repo: "https://github.com/swmcc/agentic-development/tree/main/thrawn"
+links:
+  - label: "Essay: Your Architecture Is the Bottleneck, Not the Model"
+    url: "https://swm.cc/writing/your-architecture-is-the-bottleneck/"
+  - label: "How it's built: one Python file, no dependencies"
+    url: "https://swm.cc/notes/building-thrawn-one-python-file/"
 tags: ["agents", "claude-code", "orchestration", "python", "herdr"]
 cover: "/thrawn.jpg"
 ---
