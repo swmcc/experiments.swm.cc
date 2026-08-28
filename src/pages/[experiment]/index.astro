@@ -110,6 +110,12 @@ const formatTimelineDate = (date: Date) => {
             )}
           </div>
 
+          {experiment.data.amended && (
+            <div class="mt-1 text-sm text-[--color-text-muted]">
+              <span class="font-mono">Amended {formatDate(experiment.data.amended)}</span>
+            </div>
+          )}
+
           {experiment.data.tags && experiment.data.tags.length > 0 && (
             <div class="flex gap-2 mt-4">
               {experiment.data.tags.map((tag) => (

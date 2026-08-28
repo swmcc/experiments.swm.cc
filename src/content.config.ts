@@ -9,6 +9,7 @@ const experiments = defineCollection({
     description: z.string(),
     status: z.enum(['active', 'paused', 'stalled', 'completed', 'archived']),
     started: z.coerce.date(),
+    amended: z.coerce.date().optional(),
     repo: z.string().url().optional(),
     writeup: z.string().url().optional(),
     writeup2: z.string().url().optional(),

@@ -4,12 +4,19 @@ tagline: "Plan deeply, execute in parallel."
 description: "An experiment in agentic development: a CLI that deep-plans a GitHub/GitLab ticket or a markdown brief, executes it as parallel agents in isolated git worktrees, and refuses to ship anything until a human types the code. Tightly coupled to my herdr terminal setup."
 status: "active"
 started: 2026-08-05
+amended: 2026-08-28
 repo: "https://github.com/swmcc/agentic-development/tree/main/thrawn"
 links:
+  - label: "Essay: Execution Stopped Being the Bottleneck"
+    url: "https://swm.cc/writing/execution-stopped-being-the-bottleneck/"
   - label: "Essay: Your Architecture Is the Bottleneck, Not the Model"
     url: "https://swm.cc/writing/your-architecture-is-the-bottleneck/"
   - label: "How it's built: one Python file, no dependencies"
     url: "https://swm.cc/notes/building-thrawn-one-python-file/"
+  - label: "Runner trial: method, scores and raw data"
+    url: "https://github.com/swmcc/agentic-development/blob/main/thrawn/docs/runner-trial-14.md"
+  - label: "The economics thread (issue #8)"
+    url: "https://github.com/swmcc/agentic-development/issues/8"
 tags: ["agents", "claude-code", "orchestration", "python", "herdr"]
 cover: "/thrawn.jpg"
 ---
@@ -36,182 +43,123 @@ is, I admit, part of the joke.
 
 This is an experiment in changing my workflow to be more *agentic*. Not
 autocomplete, not pair-programming, but handing an entire ticket to a system
-and judging what comes back. Thrawn is the orchestrator: give it a GitHub or
-GitLab ticket, or just a markdown brief, and it:
+and judging what comes back. Thrawn is the orchestrator: give it one or more
+GitHub or GitLab tickets, or just a markdown brief, and it:
 
 1. **Deep-thinks** a plan with a strong model that explores the repo read-only
 2. **Splits** the work into parallel tasks, each routed to the right
    model for its complexity (opus for design work, haiku for mechanical edits,
-   codex or a local model where they fit)
+   codex, pi or a local model where they fit)
 3. **Spawns** one agent per task, each in an isolated git worktree
 4. **Merges** the task branches, hands conflicts to an integrator agent, and
    runs the repo's real checks
 5. **Gates** shipping behind a one-time code. Nothing is pushed until I've
    seen the green board and typed it
 
+There is also a lightweight **swarm mode** (`thrawn swarm 36 37 38 39`): no
+planner, no integrator, just one worktree and one agent per issue with a
+human as the orchestrator. It has turned out to be the workhorse, and it is
+what made the runner trial below possible.
+
 It is tightly coupled to my [herdr](https://github.com/swmcc/agentic-development/tree/main/herdr)
 setup, the terminal orchestration layer that gives every project a space and
-every agent a home. When thrawn spawns tasks, **each task gets its own tab**,
+every agent a home. When thrawn spawns tasks, **each task gets its own pane**,
 so I can click through and watch exactly what each agent is doing rather than
 trusting a black box: every file it reads, every command it runs, every excuse
 it makes.
 
 ![herdr running my projects: spaces down the left, agents grouped below, and a tab per session across the top](/thrawn-herdr.png)
 
-That screenshot is the point of the coupling. The left rail is every project
-with its current branch, the agents panel shows what's running where, and the
-tab strip is one tab per working session. A thrawn run adds a tab per task:
-five parallel agents means five tabs I can audit live.
+## Where the experiment has been
 
-## A full walkthrough
+The [initial version of this page](/thrawn/2026-08-05-initial-page/) is
+archived in full, including the original walkthrough and a deliberately
+harsh self-assessment from three days in ("a parallel-agent orchestrator
+whose median run spawns one agent is a very expensive way to run
+`claude -p`"). That assessment produced the width gate, the approval gate
+and the verdict ledger, and the first essay,
+[Your Architecture Is the Bottleneck, Not the Model](https://swm.cc/writing/your-architecture-is-the-bottleneck/),
+came out of what the ledger said next: roughly half my tickets don't
+decompose at all, and the constraint is the shape of the codebase rather
+than the model.
 
-From ticket to PR. Issue #42 is "Add CSV export to reports".
+## What has happened since: the runner economics trial
 
-**Step 0: recon** (once per repo). Caches a codebase brief so the planner
-doesn't re-explore the repo on every run.
+A friend warned that headless Claude workers "will never benefit from
+caching" and would blow the bank, and recommended
+[pi](https://pi.dev/) driving a GPT model on subscription instead. That
+became [issue #8](https://github.com/swmcc/agentic-development/issues/8),
+an analysis with an experiment attached, which was then ticketed out
+properly and run on 28 August. The write-up is
+[Execution Stopped Being the Bottleneck](https://swm.cc/writing/execution-stopped-being-the-bottleneck/);
+the numbers live in the
+[trial document](https://github.com/swmcc/agentic-development/blob/main/thrawn/docs/runner-trial-14.md).
 
-```
-$ thrawn recon
-thrawn surveying the terrain with fable-plan …
-thrawn recon cached: .thrawn/recon.md
-```
+The short version. Before the trial could run, the machinery it needed was
+built as its own tickets: a real pi runner
+([#10](https://github.com/swmcc/agentic-development/issues/10)), pi event
+parsing for the activity ticker and panes
+([#11](https://github.com/swmcc/agentic-development/issues/11)) and
+per-task token usage recorded in state.json
+([#12](https://github.com/swmcc/agentic-development/issues/12)). Then the
+same five issues on
+[rails_love_letter](https://github.com/swmcc/rails_love_letter) were
+dispatched twice with `thrawn swarm`, once per runner, and every branch
+went up as a PR so CI could referee: codex arms
+[#58](https://github.com/swmcc/rails_love_letter/pull/58),
+[#59](https://github.com/swmcc/rails_love_letter/pull/59),
+[#60](https://github.com/swmcc/rails_love_letter/pull/60),
+[#61](https://github.com/swmcc/rails_love_letter/pull/61) and
+[#62](https://github.com/swmcc/rails_love_letter/pull/62), pi arms
+[#63](https://github.com/swmcc/rails_love_letter/pull/63) to
+[#67](https://github.com/swmcc/rails_love_letter/pull/67).
 
-**Step 1: dispatch.** The deep-think is the slow part. The plan is rendered
-in full and thrawn judges whether the ticket even deserves parallel execution
-before asking for my approval:
+Both harnesses shipped credible work on all five issues. codex ran the
+checks unprompted and went five for five green; pi skipped linting on two
+branches but produced the single best branch of the ten and was the only
+harness whose usage thrawn could record automatically. 85 percent of pi's
+token volume turned out to be server-side cache reads, which is the
+original warning dissolving on contact. Four codex arms and one pi arm
+were merged, all five issues closed, and the project's entire game engine
+followed through the same machinery the next morning.
 
-```
-$ thrawn 42
-thrawn run gh-42: Add CSV export to reports
-thrawn deep thinking with fable-plan … (this is the slow part)
-thrawn plan: 3 task(s) → t1[opus], t2[haiku], t3[codex]
+## Done
 
-⚔ plan gh-42  Add filtered CSV export to reports
-  branch: thrawn/gh-42-csv-export
-  parallelism: 3 task(s) · critical path 2 · width 1.5
-  t1  Export endpoint + CSV serializer   opus   high
-  t2  Download button on report page     haiku  low
-  t3  Endpoint tests incl. filters       codex  medium  (after t1)
-  integration checks: make test · make lint
-  pr: Add filtered CSV export to reports
-  full plan: .thrawn/runs/gh-42/plan.json
+- Runner trial phase 1, scored and merged
+  ([#14](https://github.com/swmcc/agentic-development/issues/14))
+- pi as a first-class runner with readable panes and usage capture
+  ([#10](https://github.com/swmcc/agentic-development/issues/10),
+  [#11](https://github.com/swmcc/agentic-development/issues/11),
+  [#12](https://github.com/swmcc/agentic-development/issues/12))
+- Batch dispatch: `thrawn 42 43 45` becomes one run planned together
+  ([#3](https://github.com/swmcc/agentic-development/issues/3))
+- Warm retries: same-runner retries resume the failed attempt's session
+  instead of starting cold
+  ([#13](https://github.com/swmcc/agentic-development/issues/13))
+- Abort keeps the evidence: per-task patches and head commits are
+  snapshotted before branches are deleted, a lesson learned via `git fsck`
+  ([#15](https://github.com/swmcc/agentic-development/issues/15))
+- Integration liveness on the board, so a healthy run and a hung one look
+  different ([#2](https://github.com/swmcc/agentic-development/issues/2))
 
-thrawn happy with this plan — execute it? [y/N] y
-```
+## Doing
 
-Two gates fire here. The **width gate** computes tasks divided by critical
-path: if the plan is really a to-do list in a trench coat (width below 2.0),
-thrawn refuses to execute it and tells me to feed `plan.json` to a plain
-Claude Code session instead. The deep-think isn't wasted, it just becomes a
-very good brief. Then the **approval gate**: the full plan, laid out, and a
-y/N before a single agent spawns.
-
-**Step 2: execution.** Three worktrees, three agents, three herdr tabs. My
-pane becomes the board:
-
-```
-⚔ thrawn — gh-42  Add filtered CSV export to reports
-phase: working   base: main @ 3f9a21c8
-
-  ◐ t1   Export endpoint + CSV serializer   opus    running   2m 10s
-  ◐ t2   Download button on report page     haiku   running   2m 10s
-  ○ t3   Endpoint tests incl. filters       codex   pending (after t1)
-```
-
-t1 and t2 run in parallel; t3 waits because the plan said so. Clicking a tab
-shows that agent's live stream. This is where the herdr coupling pays for
-itself, because "watch the agent work" is the difference between delegation
-and abdication.
-
-**Step 3: integrate.** When every task lands, thrawn merges the branches
-into an integration worktree, hands any conflicts to an integrator agent, and
-runs the repo's actual checks:
-
-```
-  ✔ t1   done   4m 02s   3 files
-  ✔ t2   done   2m 41s   2 files
-  ✔ t3   done   3m 15s   2 files
-
-thrawn merging 3 branches → thrawn/gh-42-csv-export
-thrawn checks: make test ✔ · make lint ✔
-
-ALL GREEN   ship code: 482913
-```
-
-**Step 4: ship.** The one-time code is the hard gate. No agent can push;
-only I can, by proving I looked:
-
-```
-$ thrawn ship gh-42 --code 482913
-thrawn pushed thrawn/gh-42-csv-export
-thrawn PR opened: Add filtered CSV export to reports (Closes #42)
-```
-
-When it goes wrong, and it does, `thrawn retry` reruns failed tasks,
-`thrawn adopt` accepts work an agent did but forgot to commit, and
-`thrawn abort` kills everything and deletes the worktrees.
-
-## The harsh bit
-
-I asked Claude for a brutal assessment of whether this tool is worth keeping.
-It pulled the run ledger and the numbers don't flatter me:
-
-- **Three days of real use: 11 runs, 8 shipped, 3 aborted.** It works. But
-  **five of the eight shipped runs had exactly one task**. A parallel-agent
-  orchestrator whose median run spawns one agent is a very expensive way to
-  run `claude -p`. On those runs the deep-think, the worktree, the integrator
-  and the merge machinery were pure overhead.
-- **One ticket took four runs to ship**: three aborts, one of which had
-  already spawned five agents before being scrapped. Parallel agents on one
-  codebase fail at exactly the hard part, semantic conflicts the merge doesn't
-  catch. Thrawn hands that hardest problem to its least reliable component,
-  an "integrator agent".
-- **The security posture is the worst thing about it.** Every runner bypasses
-  its sandbox, because worktrees and sandboxes don't mix. The worktree
-  isolates the *diff*, not the *blast radius*: five unsupervised agents with
-  full access to my machine, network and credentials.
-- **It's on a vendor treadmill.** Claude Code natively grows plan mode,
-  subagents, worktree isolation and orchestration on someone else's payroll.
-  A chunk of thrawn is a bespoke shadow of the vendor roadmap, devalued a
-  little with every release.
-- **And the pattern risk:** this is my third piece of agent tooling while the
-  actual products sit in other repos. Tool-building is the most seductive form
-  of procrastination available to a developer.
-
-The gates in the walkthrough exist *because* of that assessment. The width
-gate is the tool learning to say "you don't need me for this one". The
-planner prompt now says a single-task plan is a legitimate, welcome outcome,
-because inventing parallelism by splitting one coherent change across tasks
-that touch the same files costs more than no split at all. Every verdict is
-logged to `state.json`, so in 30 days the ledger (shipped-without-retry rate,
-width per run) decides whether this survives, not my fondness for it.
-
-## Why it might still be worth keeping
-
-Here's the counter-argument, and it's the one I keep coming back to:
-**thrawn's premise is that work decomposes into independent pieces, and
-whether that's true is a property of the system, not the tool.**
-
-My personal projects are mostly monoliths: Rails apps, Phoenix apps, static
-sites. A ticket against a monolith usually *is* one coherent change; my own
-data says roughly half my tickets don't decompose, and the width gate now
-catches those. But **distributed systems decompose by construction**. Service
-boundaries are task boundaries. Change an API contract and the producer, the
-consumer, the contract tests and the infra config are genuinely independent,
-independently testable pieces of work. Width of 2 or more isn't the lucky
-case there, it's the default. Separate services also mean separate repos and
-separate blast radii, which softens both the merge problem and the security
-problem in one move.
-
-I don't really have that in my personal projects. I do at work. So the honest
-version of this experiment might be that the personal repos are the training
-ground, where I calibrate the thresholds and burn the failure modes into
-memory cheaply, and the real trial belongs on a distributed system, where the
-tool's core bet is actually true. That's worth exploring too (policies
-permitting).
+- **Phase 2 of the runner trial**: pi and codex both sit in the planner's
+  rotation for a fortnight of ordinary ungroomed work, the usage ledger
+  records every task, and the final routing verdict gets written from
+  those numbers ([#14](https://github.com/swmcc/agentic-development/issues/14),
+  decision record in [#8](https://github.com/swmcc/agentic-development/issues/8))
+- An explicit run-the-checks-before-committing step in the executor
+  prompt, so pi's lint discipline is fixed going into phase 2
+- Still open and honest about it: swarm tab detection outside a herdr pane
+  ([#5](https://github.com/swmcc/agentic-development/issues/5)) and
+  interactive agent sessions
+  ([#7](https://github.com/swmcc/agentic-development/issues/7))
 
 ## Status
 
-Active, scope frozen. It gets 30 days of ledger data across my repos, then
-the numbers decide. The plan approval gate, the width gate and the verdict
-logging landed this week; the next post will be the verdict.
+Active. The 30-day ledger trial continues, now with per-task token and
+cost data feeding it. The thesis has sharpened twice: first from "which
+model" to "which architecture", and now from "what does it cost" to
+"who grooms the tickets and who reviews the branches". Execution stopped
+being the bottleneck; the next post will be about what replaced it.
